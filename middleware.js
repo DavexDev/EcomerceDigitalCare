@@ -122,7 +122,7 @@ export function middleware(request) {
   // 3. Verificar sesión admin (excepto login)
   if (pathname.startsWith('/admin') && !pathname.startsWith('/admin/login')) {
     const adminCookie = request.cookies.get('dc_admin');
-    if (!adminCookie || adminCookie.value !== 'authenticated') {
+    if (!adminCookie?.value) {
       const loginUrl = new URL('/admin/login', request.url);
       loginUrl.searchParams.set('from', pathname);
       return NextResponse.redirect(loginUrl);

@@ -68,7 +68,7 @@ export default function AdminLayout({ children }) {
               {user.email?.[0]?.toUpperCase() ?? 'A'}
             </div>
             <div className="admin-user-details">
-              <span className="admin-user-name">{user.displayName ?? 'Admin'}</span>
+              <span className="admin-user-name">Admin</span>
               <span className="admin-user-email">{user.email}</span>
             </div>
           </div>

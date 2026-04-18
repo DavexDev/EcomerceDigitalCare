@@ -1376,6 +1376,73 @@ textarea {
   background-color: #3367d6;
 }
 
+/* === ADMIN LOGIN (local auth) === */
+.admin-login-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0a1628 0%, #176887 60%, #64ccc5 100%);
+  padding: 20px;
+}
+.admin-login-box {
+  background: #fff;
+  border-radius: 18px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.admin-login-brand {
+  text-align: center;
+  margin-bottom: 32px;
+  color: #176887;
+}
+.admin-login-brand svg { margin-bottom: 10px; }
+.admin-login-brand h1 { font-size: 1.5rem; color: #0a1628; margin: 0 0 4px; }
+.admin-login-brand p  { font-size: 0.85rem; color: #718096; margin: 0; }
+.admin-login-form { display: flex; flex-direction: column; gap: 16px; }
+.admin-login-field { display: flex; flex-direction: column; gap: 6px; }
+.admin-login-field label {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 0.82rem; font-weight: 600; color: #4a5568;
+}
+.admin-login-field input {
+  padding: 10px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+.admin-login-field input:focus { border-color: #176887; }
+.admin-login-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px;
+  background: linear-gradient(135deg, #176887 0%, #64ccc5 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  font-family: inherit;
+  margin-top: 4px;
+}
+.admin-login-btn:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
+.admin-login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.admin-login-error {
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  color: #c53030;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
 /* === LOADING === */
 .loading {
   display: flex;
