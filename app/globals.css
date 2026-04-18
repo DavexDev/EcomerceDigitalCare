@@ -907,6 +907,9 @@ img {
   font-weight: 600;
   color: #176887;
 }
+html.dark .form-group label {
+  color: #64ccc5;
+}
 
 .select-wrapper {
   position: relative;
@@ -2472,6 +2475,47 @@ html.dark .checkout-success h2 {
 html.dark .checkout-success p {
   color: #a0aec0;
 }
+html.dark .checkout-left h1,
+html.dark .checkout-form h3 {
+  color: #e2e8f0;
+}
+html.dark .checkout-subtitle {
+  color: #8fa3ba;
+}
+html.dark .bank-card {
+  border-color: #2d3748;
+}
+html.dark .bank-row {
+  border-bottom-color: #2d3748;
+}
+html.dark .bank-row span {
+  color: #8fa3ba;
+}
+html.dark .bank-row strong {
+  color: #e2e8f0;
+}
+html.dark .monto-total {
+  color: #64ccc5 !important;
+}
+html.dark .copy-btn {
+  color: #64ccc5;
+}
+html.dark .checkout-form input,
+html.dark .checkout-form select,
+html.dark .checkout-form textarea {
+  background: #0f1117;
+  border-color: #2d3748;
+  color: #e2e8f0;
+}
+html.dark .checkout-form input:focus,
+html.dark .checkout-form select:focus,
+html.dark .checkout-form textarea:focus {
+  border-color: #64ccc5;
+  outline: none;
+}
+html.dark .form-error {
+  color: #fc8181;
+}
 
 /* ─── Dark mode: Auth pages ─── */
 html.dark .auth-page {
@@ -2552,7 +2596,11 @@ html.dark .pedido-card {
   border-color: #2d3748;
 }
 html.dark .pedido-header {
+  background: #161b27;
   border-bottom-color: #2d3748;
+}
+html.dark .pedido-id {
+  color: #e2e8f0;
 }
 html.dark .pedido-id {
   color: #a0aec0;
@@ -2563,6 +2611,16 @@ html.dark .pedido-date {
 html.dark .pedido-items {
   color: #a0aec0;
 }
+html.dark .pedido-items li {
+  color: #8fa3ba;
+}
+html.dark .pedido-footer {
+  border-top-color: #2d3748;
+  color: #8fa3ba;
+}
+html.dark .pedido-fecha {
+  color: #718096;
+}
 html.dark .pedido-total {
   color: #64ccc5;
 }
@@ -2571,6 +2629,13 @@ html.dark .pedidos-empty {
 }
 html.dark .pedidos-empty a {
   color: #64ccc5;
+}
+html.dark .cuenta-empty {
+  color: #718096;
+}
+html.dark .cuenta-main p,
+html.dark .cuenta-content p {
+  color: #a0aec0;
 }
 
 /* ════════════════════════════════════════════════
