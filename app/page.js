@@ -1,6 +1,14 @@
 'use client';
 import Header from '@/components/Header';
 import Link from 'next/link';
+import { 
+  Wrench, Thermometer, Search, Settings, Disc3, 
+  Keyboard, Mouse, Headphones, 
+  AppWindow, BarChart3, Shield,
+  Monitor, Home, Zap,
+  Target, Gamepad2, Lightbulb,
+  Lock, ScanSearch
+} from 'lucide-react';
 
 export default function HomePage() {
   const openWhatsApp = (producto) => {
@@ -87,11 +95,11 @@ export default function HomePage() {
             </div>
             <div className="section-right">
               <div className="feature-grid">
-                <div className="feature-item"><span className="feature-icon">🔧</span> Limpieza interna y externa</div>
-                <div className="feature-item"><span className="feature-icon">🌡️</span> Cambio de pasta térmica</div>
-                <div className="feature-item"><span className="feature-icon">🔍</span> Diagnóstico de fallos</div>
-                <div className="feature-item"><span className="feature-icon">⚙️</span> Reparación de hardware</div>
-                <div className="feature-item"><span className="feature-icon">💿</span> Instalación de sistema operativo</div>
+                <div className="feature-item"><span className="feature-icon"><Wrench size={20} /></span> Limpieza interna y externa</div>
+                <div className="feature-item"><span className="feature-icon"><Thermometer size={20} /></span> Cambio de pasta térmica</div>
+                <div className="feature-item"><span className="feature-icon"><Search size={20} /></span> Diagnóstico de fallos</div>
+                <div className="feature-item"><span className="feature-icon"><Settings size={20} /></span> Reparación de hardware</div>
+                <div className="feature-item"><span className="feature-icon"><Disc3 size={20} /></span> Instalación de sistema operativo</div>
               </div>
             </div>
           </div>
@@ -116,22 +124,22 @@ export default function HomePage() {
           <p className="products-desc">Encuentra los mejores complementos para tu PC o consola.</p>
           <div className="products-grid">
             <div className="product-card-modern">
-              <div className="product-icon">⌨️</div>
+              <div className="product-icon"><Keyboard size={32} /></div>
               <h3>Teclado Mecánico RGB</h3>
               <p>Iluminación LED, switches blue, ideal para gaming.</p>
-              <span className="product-price">Q250</span>
+              <span className="product-price">Desde Q250</span>
             </div>
             <div className="product-card-modern">
-              <div className="product-icon">🖱️</div>
+              <div className="product-icon"><Mouse size={32} /></div>
               <h3>Mouse Gamer 7200 DPI</h3>
               <p>Diseño ergonómico, 6 botones programables.</p>
-              <span className="product-price">Q180</span>
+              <span className="product-price">Desde Q180</span>
             </div>
             <div className="product-card-modern">
-              <div className="product-icon">🎧</div>
+              <div className="product-icon"><Headphones size={32} /></div>
               <h3>Auriculares con Micrófono</h3>
               <p>Sonido envolvente, cómodos para largas sesiones.</p>
-              <span className="product-price">Q220</span>
+              <span className="product-price">Desde Q220</span>
             </div>
           </div>
         </div>
@@ -147,22 +155,22 @@ export default function HomePage() {
           <p className="products-desc">Licencias originales con activación segura garantizada.</p>
           <div className="products-grid">
             <div className="product-card-modern">
-              <div className="product-icon">🪟</div>
+              <div className="product-icon"><AppWindow size={32} /></div>
               <h3>Windows 10/11 Pro</h3>
               <p>Licencia perpetua</p>
-              <span className="product-price">Q150</span>
+              <span className="product-price">Desde Q150</span>
             </div>
             <div className="product-card-modern">
-              <div className="product-icon">📊</div>
+              <div className="product-icon"><BarChart3 size={32} /></div>
               <h3>Microsoft Office 2021</h3>
               <p>Word, Excel, PowerPoint y más</p>
-              <span className="product-price">Q200</span>
+              <span className="product-price">Desde Q200</span>
             </div>
             <div className="product-card-modern">
-              <div className="product-icon">🛡️</div>
+              <div className="product-icon"><Shield size={32} /></div>
               <h3>Antivirus ESET</h3>
               <p>Protección total por 1 año</p>
-              <span className="product-price">Q120</span>
+              <span className="product-price">Desde Q120</span>
             </div>
           </div>
         </div>
@@ -182,9 +190,9 @@ export default function HomePage() {
             </div>
             <div className="section-right">
               <div className="feature-grid">
-                <div className="feature-item"><span className="feature-icon">🖥️</span> Diagnóstico remoto seguro</div>
-                <div className="feature-item"><span className="feature-icon">🏠</span> Reparaciones a domicilio</div>
-                <div className="feature-item"><span className="feature-icon">⚡</span> Optimización de rendimiento</div>
+                <div className="feature-item"><span className="feature-icon"><Monitor size={20} /></span> Diagnóstico remoto seguro</div>
+                <div className="feature-item"><span className="feature-icon"><Home size={20} /></span> Reparaciones a domicilio</div>
+                <div className="feature-item"><span className="feature-icon"><Zap size={20} /></span> Optimización de rendimiento</div>
               </div>
             </div>
           </div>
@@ -205,9 +213,9 @@ export default function HomePage() {
             </div>
             <div className="section-right">
               <div className="feature-grid">
-                <div className="feature-item"><span className="feature-icon">🎯</span> Elección de equipos</div>
-                <div className="feature-item"><span className="feature-icon">🎮</span> Configuraciones personalizadas</div>
-                <div className="feature-item"><span className="feature-icon">💡</span> Soluciones a medida</div>
+                <div className="feature-item"><span className="feature-icon"><Target size={20} /></span> Elección de equipos</div>
+                <div className="feature-item"><span className="feature-icon"><Gamepad2 size={20} /></span> Configuraciones personalizadas</div>
+                <div className="feature-item"><span className="feature-icon"><Lightbulb size={20} /></span> Soluciones a medida</div>
               </div>
             </div>
           </div>
@@ -228,9 +236,9 @@ export default function HomePage() {
             </div>
             <div className="section-right">
               <div className="feature-grid">
-                <div className="feature-item"><span className="feature-icon">🛡️</span> Instalación de antivirus</div>
-                <div className="feature-item"><span className="feature-icon">🔒</span> Protección de datos</div>
-                <div className="feature-item"><span className="feature-icon">🔎</span> Auditoría de seguridad</div>
+                <div className="feature-item"><span className="feature-icon"><Shield size={20} /></span> Instalación de antivirus</div>
+                <div className="feature-item"><span className="feature-icon"><Lock size={20} /></span> Protección de datos</div>
+                <div className="feature-item"><span className="feature-icon"><ScanSearch size={20} /></span> Auditoría de seguridad</div>
               </div>
             </div>
           </div>

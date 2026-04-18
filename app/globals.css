@@ -718,7 +718,7 @@ img {
   position: absolute;
   top: 100%;
   left: 0;
-  display: none;
+  display: none; /* controlled via React inline style */
   flex-direction: column;
   background: #ffffff;
   border: 1px solid #e0e0e0;
@@ -739,10 +739,6 @@ img {
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
   border-bottom: 6px solid #ffffff;
-}
-
-.has-submenu:hover .submenu {
-  display: flex;
 }
 
 .submenu li {
@@ -781,19 +777,18 @@ img {
   border-radius: 6px;
   transition: background 0.2s;
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .has-submenu:hover .submenu-toggle {
   background: rgba(100, 204, 197, 0.15);
 }
 
-.arrow {
-  font-size: 0.7em;
+.arrow-icon {
   transition: transform 0.3s;
-  margin-left: 2px;
 }
 
-.has-submenu:hover .arrow {
+.arrow-icon.rotated {
   transform: rotate(180deg);
 }
 
@@ -882,6 +877,13 @@ img {
 
 .modal-body {
   padding: 20px;
+}
+
+.modal-branch {
+  font-size: 0.9rem;
+  color: #176887;
+  margin-bottom: 16px;
+  font-weight: 600;
 }
 
 .modal-footer {
@@ -1096,14 +1098,6 @@ textarea {
 
   .submenu::before {
     display: none;
-  }
-
-  .has-submenu:hover .submenu {
-    display: none;
-  }
-
-  .submenu.show {
-    display: flex;
   }
 
   .submenu li a,
@@ -1447,4 +1441,257 @@ textarea {
 
 .mb-4 {
   margin-bottom: 1rem;
+}
+
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+html.dark body {
+  background-color: #0f1117;
+  color: #e2e8f0;
+}
+
+/* Header */
+html.dark .header {
+  background-color: #161b27;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+html.dark .header.scrolled {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+/* Nav links */
+html.dark .nav ul li a,
+html.dark .nav ul li button,
+html.dark .nav ul li span {
+  color: #e2e8f0;
+}
+html.dark .nav ul li a:hover,
+html.dark .nav ul li button:hover,
+html.dark .submenu-toggle:hover {
+  color: #64ccc5;
+}
+
+/* Submenu */
+html.dark .submenu {
+  background: #1e2433;
+  border-color: #2d3748;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+html.dark .submenu::before {
+  border-bottom-color: #1e2433;
+}
+html.dark .submenu li a,
+html.dark .submenu li button {
+  color: #e2e8f0;
+}
+html.dark .submenu li a:hover,
+html.dark .submenu li button:hover {
+  background-color: #2d3748;
+  color: #64ccc5;
+}
+
+/* Hero */
+html.dark .hero {
+  background: linear-gradient(135deg, #0f1117 0%, #161b27 60%, #1a2535 100%);
+}
+
+/* Stats */
+html.dark .stats-section {
+  background-color: #161b27;
+}
+html.dark .stat-label {
+  color: #94a3b8;
+}
+
+/* Trust banner */
+html.dark .trust-banner {
+  background-color: #1e2433;
+  color: #94a3b8;
+}
+html.dark .trust-logos span {
+  color: #64ccc5;
+}
+
+/* Sections */
+html.dark .section,
+html.dark .numbered-section,
+html.dark .services-intro,
+html.dark .products-section,
+html.dark .products-preview {
+  background-color: #0f1117;
+}
+html.dark .alt-bg,
+html.dark .section.alt-bg,
+html.dark .numbered-section.alt-bg,
+html.dark .products-preview.alt-bg {
+  background-color: #161b27;
+}
+html.dark .section-number {
+  color: rgba(100,204,197,0.25);
+}
+/* All headings */
+html.dark .section h2,
+html.dark .section p,
+html.dark .section-title-large,
+html.dark .numbered-section h2,
+html.dark .section-left h2,
+html.dark .products-header h2 {
+  color: #e2e8f0;
+}
+/* All body text */
+html.dark .numbered-section p,
+html.dark .section-left p,
+html.dark .products-desc {
+  color: #94a3b8;
+}
+
+/* Feature items */
+html.dark .feature-item {
+  background-color: #1e2433;
+  color: #cbd5e1;
+  border-left-color: transparent;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+html.dark .numbered-section.alt-bg .feature-item {
+  background-color: #0f1117;
+}
+html.dark .feature-item:hover {
+  border-left-color: #64ccc5;
+  background-color: #222b3a;
+}
+html.dark .feature-icon {
+  color: #64ccc5;
+}
+
+/* Product cards */
+html.dark .product-card-modern {
+  background-color: #1e2433;
+  border-color: #2d3748;
+  color: #e2e8f0;
+}
+html.dark .product-card-modern h3 {
+  color: #e2e8f0;
+}
+html.dark .product-card-modern p {
+  color: #94a3b8;
+}
+html.dark .product-card-modern:hover {
+  border-color: #64ccc5;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+html.dark .product-icon {
+  color: #64ccc5;
+}
+
+/* Final CTA */
+html.dark .final-cta {
+  background: linear-gradient(135deg, #161b27 0%, #1a2535 100%);
+}
+html.dark .final-cta p {
+  color: #94a3b8;
+}
+
+/* Buttons */
+html.dark .btn-outline {
+  border-color: #64ccc5;
+  color: #64ccc5;
+}
+html.dark .btn-outline:hover {
+  background-color: #64ccc5;
+  color: #0f1117;
+}
+
+/* Modal */
+html.dark .modal-overlay {
+  background: rgba(0,0,0,0.7);
+}
+html.dark .modal {
+  background-color: #1e2433;
+  color: #e2e8f0;
+  border-color: #2d3748;
+}
+html.dark .modal-header {
+  border-bottom-color: #2d3748;
+  background-color: #161b27;
+}
+html.dark .modal-header h3 {
+  color: #e2e8f0;
+}
+html.dark .modal-footer {
+  border-top-color: #2d3748;
+  background-color: #161b27;
+}
+html.dark .modal label,
+html.dark .modal p {
+  color: #cbd5e1;
+}
+html.dark .modal textarea,
+html.dark .modal select,
+html.dark .modal input {
+  background-color: #0f1117;
+  border-color: #2d3748;
+  color: #e2e8f0;
+}
+html.dark .modal textarea:focus,
+html.dark .modal select:focus {
+  border-color: #64ccc5;
+}
+html.dark .modal-branch {
+  color: #64ccc5;
+}
+
+/* Admin panel */
+html.dark .admin-layout {
+  background-color: #0f1117;
+}
+html.dark .admin-sidebar {
+  background-color: #161b27;
+  border-right-color: #2d3748;
+}
+html.dark .admin-content {
+  background-color: #0f1117;
+  color: #e2e8f0;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #e0e0e0;
+  background: transparent;
+  color: #424242;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+}
+.theme-toggle:hover {
+  border-color: #64ccc5;
+  color: #64ccc5;
+  background: rgba(100, 204, 197, 0.1);
+}
+html.dark .theme-toggle {
+  border-color: #2d3748;
+  color: #e2e8f0;
+}
+html.dark .theme-toggle:hover {
+  border-color: #64ccc5;
+  color: #64ccc5;
+}
+
+/* Mobile nav dark */
+@media (max-width: 768px) {
+  html.dark .nav {
+    background-color: #161b27;
+  }
+  html.dark .submenu {
+    background-color: #0f1117;
+  }
+  html.dark .hamburger {
+    color: #e2e8f0;
+  }
 }

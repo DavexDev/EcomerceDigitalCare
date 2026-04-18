@@ -5,9 +5,10 @@ import { supabase } from '@/lib/supabase';
 export default function WhatsAppModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [producto, setProducto] = useState('');
-  const [sucursal, setSucursal] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [sending, setSending] = useState(false);
+
+  const WHATSAPP = '57655899'; // Chiquimula
 
   useEffect(() => {
     const handleOpen = (e) => {
@@ -21,32 +22,24 @@ export default function WhatsAppModal() {
 
   const handleClose = () => {
     setIsOpen(false);
-    setSucursal('');
     setMensaje('');
   };
 
   const handleSubmit = async () => {
-    if (!sucursal) {
-      alert('Por favor selecciona una sucursal');
-      return;
-    }
-
     setSending(true);
 
     try {
-      // Guardar lead en Supabase
       await supabase.from('contactos').insert({
         producto,
-        sucursal: sucursal === '57655899' ? 'Chiquimula' : 'Esquipulas',
+        sucursal: 'Chiquimula',
         mensaje: mensaje || null,
       });
     } catch (error) {
       console.error('Error guardando contacto:', error);
     }
 
-    // Abrir WhatsApp
     const msg = encodeURIComponent(`Hola, estoy interesado en: ${producto}${mensaje ? '\n' + mensaje : ''}`);
-    window.open(`https://wa.me/502${sucursal}?text=${msg}`, '_blank');
+    window.open(`https://wa.me/502${WHATSAPP}?text=${msg}`, '_blank');
 
     setSending(false);
     handleClose();
@@ -65,22 +58,8 @@ export default function WhatsAppModal() {
         <div className="modal-body">
           <p id="mensaje-producto">Producto seleccionado: {producto}</p>
           
-          <div className="form-group">
-            <label htmlFor="select-sucursal">Selecciona la sucursal:</label>
-            <div className="select-wrapper">
-              <select 
-                id="select-sucursal" 
-                value={sucursal} 
-                onChange={(e) => setSucursal(e.target.value)}
-              >
-                <option value="">Elige una opción</option>
-                <option value="57655899">Chiquimula - 5765 5899</option>
-                <option value="54249388">Esquipulas - 5424 9388</option>
-              </select>
-              <span className="select-arrow">▾</span>
-            </div>
-          </div>
-          
+          <p className="modal-branch">📍 Sucursal Chiquimula · 5765 5899</p>
+
           <div className="form-group">
             <label htmlFor="mensaje-adicional">Mensaje adicional (opcional):</label>
             <textarea 
