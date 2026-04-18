@@ -1,40 +1,59 @@
 import { supabase } from '@/lib/supabase';
+import Link from 'next/link';
+
+export const revalidate = 0; // Siempre datos frescos
+
+async function getStats() {
+  const [accesoriosRes, licenciasRes, contactosRes] = await Promise.all([
+    supabase.from('accesorios').select('*', { count: 'exact', head: true }),
+    supabase.from('licencias').select('*', { count: 'exact', head: true }),
+    supabase.from('contactos').select('*', { count: 'exact', head: true }),
+  ]);
+
+  return {
+    accesorios: accesoriosRes.count || 0,
+    licencias: licenciasRes.count || 0,
+    contactos: contactosRes.count || 0,
+  };
+}
 
 export default async function AdminDashboard() {
-  const [{ count: totalAccesorios }, { count: totalLicencias }, { count: totalContactos }] =
-    await Promise.all([
-      supabase.from('accesorios').select('*', { count: 'exact', head: true }),
-      supabase.from('licencias').select('*', { count: 'exact', head: true }),
-      supabase.from('contactos').select('*', { count: 'exact', head: true }),
-    ]);
-
-  const stats = [
-    { label: 'Accesorios', value: totalAccesorios ?? 0, color: '#176887' },
-    { label: 'Licencias',  value: totalLicencias  ?? 0, color: '#64ccc5' },
-    { label: 'Leads',      value: totalContactos  ?? 0, color: '#38a169' },
-  ];
+  const stats = await getStats();
 
   return (
     <div>
-      <h1 style={{ color: '#176887', fontSize: '1.8rem', marginBottom: '8px' }}>Dashboard</h1>
-      <p style={{ color: '#666', marginBottom: '32px' }}>Resumen general de DigitalCare GT</p>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '20px' }}>
-        {stats.map((s) => (
-          <div key={s.label} className="admin-card" style={{ textAlign: 'center' }}>
-            <p style={{ fontSize: '3rem', fontWeight: 700, color: s.color }}>{s.value}</p>
-            <p style={{ color: '#666', marginTop: '4px' }}>{s.label}</p>
-          </div>
-        ))}
+      <h2>Dashboard</h2>
+      
+      <div className="admin-cards">
+        <Link href="/admin/accesorios" className="admin-card">
+          <h3>Accesorios</h3>
+          <div className="count">{stats.accesorios}</div>
+        </Link>
+        
+        <Link href="/admin/licencias" className="admin-card">
+          <h3>Licencias</h3>
+          <div className="count">{stats.licencias}</div>
+        </Link>
+        
+        <Link href="/admin/contactos" className="admin-card">
+          <h3>Contactos</h3>
+          <div className="count">{stats.contactos}</div>
+        </Link>
       </div>
 
-      <div className="admin-card" style={{ marginTop: '32px' }}>
-        <h2 style={{ color: '#176887', marginBottom: '12px' }}>Accesos rápidos</h2>
-        <ul style={{ listStyle: 'none', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-          <li><a href="/admin/accesorios" className="btn-ver-mas">Gestionar Accesorios</a></li>
-          <li><a href="/admin/licencias"  className="btn-ver-mas">Gestionar Licencias</a></li>
-          <li><a href="/admin/contactos"  className="btn-ver-mas">Ver Leads</a></li>
-        </ul>
+      <div className="admin-form">
+        <h2>Acciones Rápidas</h2>
+        <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
+          <Link href="/admin/accesorios" className="btn-primary">
+            Gestionar Accesorios
+          </Link>
+          <Link href="/admin/licencias" className="btn-primary">
+            Gestionar Licencias
+          </Link>
+          <Link href="/" className="btn-secondary" target="_blank">
+            Ver Sitio
+          </Link>
+        </div>
       </div>
     </div>
   );

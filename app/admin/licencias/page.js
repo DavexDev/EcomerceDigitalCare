@@ -1,51 +1,60 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-
-const TIPOS = ['permanente', 'anual', 'mensual'];
-const PLATAFORMAS = ['Windows', 'Office', 'Antivirus', 'Adobe', 'macOS', 'Linux', 'Otro'];
 
 export default function AdminLicenciasPage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState({ nombre: '', descripcion: '', precio: '', tipo: 'permanente', plataforma: 'Windows' });
   const [editId, setEditId] = useState(null);
-  const [msg, setMsg] = useState('');
+  const [form, setForm] = useState({ 
+    nombre: '', 
+    descripcion: '', 
+    precio: '', 
+    duracion: '12', 
+    tipo: 'antivirus' 
+  });
 
-  const fetchItems = useCallback(async () => {
-    setLoading(true);
-    const { data } = await supabase.from('licencias').select('*').order('plataforma');
+  const fetchItems = async () => {
+    const { data } = await supabase.from('licencias').select('*').order('nombre');
     setItems(data || []);
     setLoading(false);
-  }, []);
-
-  useEffect(() => { fetchItems(); }, [fetchItems]);
-
-  const resetForm = () => {
-    setForm({ nombre: '', descripcion: '', precio: '', tipo: 'permanente', plataforma: 'Windows' });
-    setEditId(null);
   };
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = { nombre: form.nombre, descripcion: form.descripcion,
-      precio: parseFloat(form.precio), tipo: form.tipo, plataforma: form.plataforma };
+    const payload = {
+      nombre: form.nombre,
+      descripcion: form.descripcion,
+      precio: parseFloat(form.precio),
+      duracion: parseInt(form.duracion),
+      tipo: form.tipo,
+      activo: true,
+    };
+
     if (editId) {
       await supabase.from('licencias').update(payload).eq('id', editId);
-      setMsg('Licencia actualizada.');
     } else {
       await supabase.from('licencias').insert(payload);
-      setMsg('Licencia creada.');
     }
-    resetForm();
+
+    setForm({ nombre: '', descripcion: '', precio: '', duracion: '12', tipo: 'antivirus' });
+    setEditId(null);
     fetchItems();
-    setTimeout(() => setMsg(''), 3000);
   };
 
   const handleEdit = (item) => {
-    setForm({ nombre: item.nombre, descripcion: item.descripcion ?? '',
-      precio: item.precio, tipo: item.tipo, plataforma: item.plataforma ?? 'Windows' });
     setEditId(item.id);
+    setForm({
+      nombre: item.nombre,
+      descripcion: item.descripcion,
+      precio: item.precio.toString(),
+      duracion: item.duracion?.toString() || '12',
+      tipo: item.tipo || 'antivirus',
+    });
   };
 
   const handleToggle = async (item) => {
@@ -54,36 +63,120 @@ export default function AdminLicenciasPage() {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('¿Eliminar esta licencia?')) return;
-    await supabase.from('licencias').delete().eq('id', id);
-    fetchItems();
+    if (confirm('¿Eliminar esta licencia?')) {
+      await supabase.from('licencias').delete().eq('id', id);
+      fetchItems();
+    }
   };
 
-  const selectStyle = { padding:'10px', border:'1px solid #ccc', borderRadius:'8px', fontFamily:'inherit', background:'#fff', width:'100%' };
+  if (loading) return <div className="loading">Cargando...</div>;
 
   return (
     <div>
-      <h1 style={{ color: '#176887', fontSize: '1.8rem', marginBottom: '24px' }}>Licencias</h1>
+      <h2>Gestión de Licencias</h2>
 
-      {msg && <div style={{ padding:'12px', background:'#e6fffa', borderRadius:'8px', marginBottom:'16px', color:'#276749' }}>{msg}</div>}
+      <form className="admin-form" onSubmit={handleSubmit}>
+        <h3>{editId ? 'Editar Licencia' : 'Nueva Licencia'}</h3>
+        <div className="form-row">
+          <div className="form-group">
+            <label>Nombre</label>
+            <input
+              type="text"
+              value={form.nombre}
+              onChange={(e) => setForm({ ...form, nombre: e.target.value })}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Tipo</label>
+            <select
+              value={form.tipo}
+              onChange={(e) => setForm({ ...form, tipo: e.target.value })}
+            >
+              <option value="antivirus">Antivirus</option>
+              <option value="office">Office</option>
+              <option value="windows">Windows</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Precio (Q)</label>
+            <input
+              type="number"
+              value={form.precio}
+              onChange={(e) => setForm({ ...form, precio: e.target.value })}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Duración (meses)</label>
+            <input
+              type="number"
+              value={form.duracion}
+              onChange={(e) => setForm({ ...form, duracion: e.target.value })}
+            />
+          </div>
+        </div>
+        <div className="form-group">
+          <label>Descripción</label>
+          <textarea
+            value={form.descripcion}
+            onChange={(e) => setForm({ ...form, descripcion: e.target.value })}
+            rows="2"
+          />
+        </div>
+        <button type="submit" className="btn-primary">
+          {editId ? 'Actualizar' : 'Crear'}
+        </button>
+        {editId && (
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={() => {
+              setEditId(null);
+              setForm({ nombre: '', descripcion: '', precio: '', duracion: '12', tipo: 'antivirus' });
+            }}
+            style={{ marginLeft: '10px' }}
+          >
+            Cancelar
+          </button>
+        )}
+      </form>
 
-      {/* FORMULARIO */}
-      <div className="admin-card">
-        <h2 style={{ marginBottom: '16px', color: '#176887' }}>{editId ? 'Editar Licencia' : 'Nueva Licencia'}</h2>
-        <form onSubmit={handleSubmit} style={{ display:'grid', gap:'12px', maxWidth:'500px' }}>
-          <input required placeholder="Nombre" value={form.nombre}
-            onChange={e => setForm(p => ({...p, nombre: e.target.value}))}
-            style={{ padding:'10px', border:'1px solid #ccc', borderRadius:'8px', fontFamily:'inherit' }} />
-          <textarea placeholder="Descripción" value={form.descripcion}
-            onChange={e => setForm(p => ({...p, descripcion: e.target.value}))}
-            style={{ padding:'10px', border:'1px solid #ccc', borderRadius:'8px', fontFamily:'inherit', minHeight:'70px' }} />
-          <input required type="number" min="0" step="0.01" placeholder="Precio (Q)"
-            value={form.precio} onChange={e => setForm(p => ({...p, precio: e.target.value}))}
-            style={{ padding:'10px', border:'1px solid #ccc', borderRadius:'8px', fontFamily:'inherit' }} />
-          <select value={form.tipo} onChange={e => setForm(p => ({...p, tipo: e.target.value}))} style={selectStyle}>
-            {TIPOS.map(t => <option key={t} value={t}>{t}</option>)}
-          </select>
-          <select value={form.plataforma} onChange={e => setForm(p => ({...p, plataforma: e.target.value}))} style={selectStyle}>
-            {PLATAFORMAS.map(p => <option key={p} value={p}>{p}</option>)}
-          </select>
-          <div style={{ display:'flex', gap:
+      <table className="admin-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Duración</th>
+            <th>Activo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((item) => (
+            <tr key={item.id}>
+              <td>{item.nombre}</td>
+              <td>{item.tipo}</td>
+              <td>{item.descripcion}</td>
+              <td>Q{item.precio}</td>
+              <td>{item.duracion} meses</td>
+              <td>{item.activo ? '✅' : '❌'}</td>
+              <td>
+                <div className="admin-actions">
+                  <button className="btn-edit" onClick={() => handleEdit(item)}>Editar</button>
+                  <button className="btn-toggle" onClick={() => handleToggle(item)}>
+                    {item.activo ? 'Desactivar' : 'Activar'}
+                  </button>
+                  <button className="btn-delete" onClick={() => handleDelete(item.id)}>Eliminar</button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}

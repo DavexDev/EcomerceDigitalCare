@@ -1,94 +1,121 @@
--- =============================================
--- DigitalCare GT - Supabase Database Schema
--- Ejecuta este SQL en el SQL Editor de Supabase
--- =============================================
+-- DigitalCare Supabase Schema
+-- Execute this in Supabase SQL Editor
 
--- Tabla de productos (accesorios)
-CREATE TABLE IF NOT EXISTS public.accesorios (
-  id            UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  nombre        TEXT NOT NULL,
-  descripcion   TEXT,
-  precio        NUMERIC(10, 2) NOT NULL,
-  imagen_url    TEXT,
-  stock         INT DEFAULT 0,
-  activo        BOOLEAN DEFAULT true,
-  created_at    TIMESTAMPTZ DEFAULT now()
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Accesorios table
+CREATE TABLE IF NOT EXISTS accesorios (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  nombre VARCHAR(255) NOT NULL,
+  descripcion TEXT,
+  precio DECIMAL(10,2) NOT NULL,
+  stock INTEGER DEFAULT 0,
+  activo BOOLEAN DEFAULT true,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Tabla de licencias
-CREATE TABLE IF NOT EXISTS public.licencias (
-  id            UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  nombre        TEXT NOT NULL,
-  descripcion   TEXT,
-  precio        NUMERIC(10, 2) NOT NULL,
-  tipo          TEXT CHECK (tipo IN ('permanente', 'anual', 'mensual')) DEFAULT 'permanente',
-  plataforma    TEXT,          -- Windows, macOS, Office, Antivirus, etc.
-  imagen_url    TEXT,
-  activo        BOOLEAN DEFAULT true,
-  created_at    TIMESTAMPTZ DEFAULT now()
+-- Licencias table
+CREATE TABLE IF NOT EXISTS licencias (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  nombre VARCHAR(255) NOT NULL,
+  descripcion TEXT,
+  precio DECIMAL(10,2) NOT NULL,
+  duracion INTEGER DEFAULT 12, -- months
+  tipo VARCHAR(50) DEFAULT 'antivirus', -- antivirus, office, windows, otro
+  activo BOOLEAN DEFAULT true,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Tabla de contactos / leads (formulario de WhatsApp)
-CREATE TABLE IF NOT EXISTS public.contactos (
-  id            UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  producto      TEXT NOT NULL,
-  sucursal      TEXT,          -- Chiquimula | Esquipulas
-  mensaje       TEXT,
-  created_at    TIMESTAMPTZ DEFAULT now()
+-- Leads table (contactos from WhatsApp modal)
+CREATE TABLE IF NOT EXISTS leads (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  nombre VARCHAR(255) NOT NULL,
+  telefono VARCHAR(20) NOT NULL,
+  servicio VARCHAR(255),
+  mensaje TEXT,
+  contactado BOOLEAN DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- -----------------------------------------------
+-- Create updated_at trigger function
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- Apply trigger to accesorios
+CREATE TRIGGER update_accesorios_updated_at
+  BEFORE UPDATE ON accesorios
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
+-- Apply trigger to licencias
+CREATE TRIGGER update_licencias_updated_at
+  BEFORE UPDATE ON licencias
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
 -- Row Level Security (RLS)
--- -----------------------------------------------
 
-ALTER TABLE public.accesorios  ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.licencias   ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.contactos   ENABLE ROW LEVEL SECURITY;
+-- Enable RLS on all tables
+ALTER TABLE accesorios ENABLE ROW LEVEL SECURITY;
+ALTER TABLE licencias ENABLE ROW LEVEL SECURITY;
+ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
 
--- Lectura pública (anon) de productos activos
-CREATE POLICY "Lectura pública accesorios"
-  ON public.accesorios FOR SELECT
+-- Public read access for active products
+CREATE POLICY "Public read access for active accesorios"
+  ON accesorios FOR SELECT
   USING (activo = true);
 
-CREATE POLICY "Lectura pública licencias"
-  ON public.licencias FOR SELECT
+CREATE POLICY "Public read access for active licencias"
+  ON licencias FOR SELECT
   USING (activo = true);
 
--- Solo el servicio (service_role) puede insertar/actualizar/eliminar
-CREATE POLICY "Admin total accesorios"
-  ON public.accesorios FOR ALL
-  USING (auth.role() = 'service_role');
+-- Authenticated users (admin) can do everything
+CREATE POLICY "Admin full access to accesorios"
+  ON accesorios FOR ALL
+  USING (auth.role() = 'authenticated')
+  WITH CHECK (auth.role() = 'authenticated');
 
-CREATE POLICY "Admin total licencias"
-  ON public.licencias FOR ALL
-  USING (auth.role() = 'service_role');
+CREATE POLICY "Admin full access to licencias"
+  ON licencias FOR ALL
+  USING (auth.role() = 'authenticated')
+  WITH CHECK (auth.role() = 'authenticated');
 
--- Cualquiera puede insertar contactos (leads)
-CREATE POLICY "Insertar contactos"
-  ON public.contactos FOR INSERT
+CREATE POLICY "Admin full access to leads"
+  ON leads FOR ALL
+  USING (auth.role() = 'authenticated')
+  WITH CHECK (auth.role() = 'authenticated');
+
+-- Public can insert leads (from WhatsApp modal)
+CREATE POLICY "Public can insert leads"
+  ON leads FOR INSERT
   WITH CHECK (true);
 
--- Solo service_role puede leer/borrar contactos
-CREATE POLICY "Admin leer contactos"
-  ON public.contactos FOR SELECT
-  USING (auth.role() = 'service_role');
+-- Indexes for better performance
+CREATE INDEX IF NOT EXISTS idx_accesorios_activo ON accesorios(activo);
+CREATE INDEX IF NOT EXISTS idx_licencias_activo ON licencias(activo);
+CREATE INDEX IF NOT EXISTS idx_licencias_tipo ON licencias(tipo);
+CREATE INDEX IF NOT EXISTS idx_leads_contactado ON leads(contactado);
+CREATE INDEX IF NOT EXISTS idx_leads_created_at ON leads(created_at DESC);
 
--- -----------------------------------------------
--- Datos de ejemplo (seed)
--- -----------------------------------------------
+-- Sample data for development
+INSERT INTO accesorios (nombre, descripcion, precio, stock) VALUES
+  ('Mouse Inalámbrico', 'Mouse ergonómico con DPI ajustable', 125.00, 15),
+  ('Teclado Mecánico', 'Teclado gaming con retroiluminación RGB', 350.00, 8),
+  ('Auriculares Gaming', 'Auriculares con micrófono y cancelación de ruido', 275.00, 12),
+  ('Webcam HD', 'Cámara web 1080p con micrófono integrado', 225.00, 10),
+  ('Hub USB-C', 'Hub multipuerto con HDMI, USB y lector SD', 175.00, 20);
 
-INSERT INTO public.accesorios (nombre, descripcion, precio) VALUES
-  ('Teclado Mecánico RGB',     'Iluminación LED, switches blue, ideal para gaming y escritura.',  250),
-  ('Mouse Gamer 7200 DPI',     'Diseño ergonómico, 6 botones programables.',                      180),
-  ('Auriculares con Micrófono','Sonido envolvente, cómodos para largas sesiones.',                 220),
-  ('Mousepad XL Gaming',       'Superficie extendida de tela, base antideslizante.',               89),
-  ('Webcam HD 1080p',          'Imagen nítida para videollamadas y streaming.',                    350),
-  ('Hub USB-C 7 en 1',         'HDMI, USB 3.0 x3, SD, lector de tarjetas.',                       275);
-
-INSERT INTO public.licencias (nombre, descripcion, precio, tipo, plataforma) VALUES
-  ('Windows 10/11 Pro',    'Licencia permanente, activación digital.',  150, 'permanente', 'Windows'),
-  ('Microsoft Office 2021','Word, Excel, PowerPoint y más.',             200, 'permanente', 'Office'),
-  ('Antivirus ESET',       'Protección total por 1 año.',                120, 'anual',      'Antivirus'),
-  ('Adobe Photoshop',      'Plan mensual Creative Cloud.',               180, 'mensual',    'Adobe'),
-  ('Windows Server 2022',  'Licencia permanente para servidores.',       850, 'permanente', 'Windows'),
-  ('Kaspersky Total Security','1 dispositivo, 1 año.',                   100, 'anual',      'Antivirus');
+INSERT INTO licencias (nombre, descripcion, precio, duracion, tipo) VALUES
+  ('ESET NOD32', 'Antivirus completo con protección en tiempo real', 350.00, 12, 'antivirus'),
+  ('Kaspersky Total Security', 'Suite de seguridad premium', 450.00, 12, 'antivirus'),
+  ('Microsoft 365 Personal', 'Office completo con 1TB OneDrive', 650.00, 12, 'office'),
+  ('Windows 11 Pro', 'Licencia perpetua Windows 11 Professional', 1200.00, 0, 'windows'),
+  ('Norton 360', 'Protección completa con VPN incluida', 400.00, 12, 'antivirus');

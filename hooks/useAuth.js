@@ -10,6 +10,12 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Si no hay auth configurado, simular usuario no autenticado
+    if (!auth) {
+      setLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
@@ -17,8 +23,18 @@ export function AuthProvider({ children }) {
     return () => unsubscribe();
   }, []);
 
-  const loginWithGoogle = () => signInWithPopup(auth, googleProvider);
-  const logout = () => signOut(auth);
+  const loginWithGoogle = async () => {
+    if (!auth || !googleProvider) {
+      console.warn('Firebase no está configurado. Configura las credenciales en .env.local');
+      return null;
+    }
+    return signInWithPopup(auth, googleProvider);
+  };
+
+  const logout = async () => {
+    if (!auth) return;
+    return signOut(auth);
+  };
 
   return (
     <AuthContext.Provider value={{ user, loading, loginWithGoogle, logout }}>

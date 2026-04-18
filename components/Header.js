@@ -18,6 +18,11 @@ export default function Header() {
     setMenuOpen(false);
   };
 
+  const openWhatsApp = (producto) => {
+    window.dispatchEvent(new CustomEvent('open-whatsapp', { detail: { producto } }));
+    setMenuOpen(false);
+  };
+
   return (
     <header className={`header${scrolled ? ' scrolled' : ''}`}>
       <div className="logo">
@@ -36,8 +41,8 @@ export default function Header() {
 
       <nav className={`nav${menuOpen ? ' show' : ''}`} id="nav-menu">
         <ul className="menu-principal">
-          <li className="has-submenu group">
-            <span className="submenu-toggle cursor-pointer">
+          <li className="has-submenu">
+            <span className="submenu-toggle">
               Servicios <span className="arrow">▾</span>
             </span>
             <ul className="submenu">
@@ -49,7 +54,7 @@ export default function Header() {
             </ul>
           </li>
           <li className="has-submenu">
-            <span className="submenu-toggle cursor-pointer">
+            <span className="submenu-toggle">
               Productos <span className="arrow">▾</span>
             </span>
             <ul className="submenu">
@@ -58,15 +63,9 @@ export default function Header() {
             </ul>
           </li>
           <li>
-            <button
-              className="nav-btn btn-consultar"
-              data-producto="Contacto General"
-              onClick={() => {
-                document.dispatchEvent(new CustomEvent('open-whatsapp', {
-                  detail: { producto: 'Contacto General' }
-                }));
-                setMenuOpen(false);
-              }}
+            <button 
+              className="nav-btn btn-consultar" 
+              onClick={() => openWhatsApp('Contacto General')}
             >
               Contacto
             </button>
