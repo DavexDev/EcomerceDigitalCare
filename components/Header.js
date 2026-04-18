@@ -34,7 +34,14 @@ export default function Header() {
     <header className={`header${scrolled ? ' scrolled' : ''}`}>
       <div className="logo">
         <Link href="/">
-          <Image src="/logo.png" alt="Logo DigitalCare GT" width={120} height={40} priority />
+          <Image 
+            src="/logo.png" 
+            alt="DigitalCare GT" 
+            width={180} 
+            height={60} 
+            priority 
+            style={{ objectFit: 'contain' }}
+          />
         </Link>
       </div>
 
