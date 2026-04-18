@@ -1936,24 +1936,31 @@ html.dark .product-card .btn-consultar:hover {
   color: #0a1628;
   background: #f8f9fa;
 }
-.order-items { list-style: none; padding: 12px 20px; display: flex; flex-direction: column; gap: 10px; }
-.order-item { display: flex; justify-content: space-between; font-size: 0.9rem; color: #424242; }
-.order-item-name em { color: #999; font-style: normal; }
+.order-items { list-style: none; padding: 12px 20px; display: flex; flex-direction: column; gap: 0; }
+.order-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: #424242; padding: 9px 0; border-bottom: 1px solid #f0f0f0; }
+.order-item:last-child { border-bottom: none; }
+.order-item-name { font-weight: 600; color: #1a2742; }
+.order-item-name em { color: #888; font-style: normal; font-weight: 400; font-size: 0.85em; }
+.order-item > span:last-child { font-weight: 600; color: #176887; white-space: nowrap; }
 .order-total {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 14px 20px;
-  border-top: 1px solid #e0e0e0;
-  font-size: 1.1rem;
-  background: #f8f9fa;
+  border-top: 2px solid #e0e0e0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  background: #f0f8ff;
+  color: #0a1628;
 }
-.order-total strong { color: #176887; font-size: 1.25rem; }
+.order-total strong { color: #176887; font-size: 1.3rem; }
 .order-note {
   padding: 12px 20px;
   font-size: 0.82rem;
-  color: #666;
-  line-height: 1.5;
+  color: #718096;
+  line-height: 1.55;
   border-top: 1px solid #f0f0f0;
+  background: #fafbfc;
 }
 .link-btn {
   background: none;
@@ -2565,11 +2572,13 @@ html.dark .checkout-note {
   color: #fbd38d;
 }
 html.dark .order-summary {
-  background: #1e2433;
+  background: #1a2030;
   border-color: #2d3748;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.35);
 }
 html.dark .order-summary h3 {
   color: #e2e8f0;
+  background: #1e2840;
   border-bottom-color: #2d3748;
 }
 html.dark .order-line {
@@ -2594,16 +2603,20 @@ html.dark .checkout-success p {
 }
 html.dark .order-items li,
 html.dark .order-item {
-  color: #8fa3ba;
-  border-bottom-color: #2d3748;
+  color: #a8bbd0;
+  border-bottom-color: #2a3447;
 }
-html.dark .order-item-name em { color: #4a5568; }
+html.dark .order-item-name { color: #cbd5e0; font-weight: 600; }
+html.dark .order-item-name em { color: #60748c; }
+html.dark .order-item > span:last-child { color: #94b4ca; font-weight: 600; }
 html.dark .order-total {
   border-top-color: #2d3748;
+  border-top-width: 2px;
+  background: #1e2840;
   color: #e2e8f0;
 }
-html.dark .order-total strong { color: #64ccc5; }
-html.dark .order-note { color: #4a5568; }
+html.dark .order-total strong { color: #64ccc5; font-size: 1.3rem; }
+html.dark .order-note { color: #718096; background: #161c28; border-top-color: #2a3447; }
 html.dark .link-btn { color: #64ccc5; }
 html.dark .link-btn:hover { color: #4db8b0; }
 html.dark .checkout-left h1,

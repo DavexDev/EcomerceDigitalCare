@@ -1,4 +1,4 @@
-import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { query } from '@/lib/db';
 import Link from 'next/link';
 import { Users, ShoppingBag, DollarSign, Clock, TrendingUp, ArrowRight } from 'lucide-react';
 
@@ -30,19 +30,10 @@ function timeAgo(dateStr) {
 }
 
 async function getDashboardData() {
-  const [
-    { data: pedidos },
-    { data: { users } = {} },
-  ] = await Promise.all([
-    supabaseAdmin
-      .from('pedidos')
-      .select('id, nombre, email, items, total, estado, created_at')
-      .order('created_at', { ascending: false }),
-    supabaseAdmin.auth.admin.listUsers(),
+  const [allPedidos, allClients] = await Promise.all([
+    query('SELECT id, nombre, email, items, total, estado, created_at FROM pedidos ORDER BY created_at DESC'),
+    query('SELECT id, email, nombre, created_at FROM clientes ORDER BY created_at DESC'),
   ]);
-
-  const allPedidos = pedidos ?? [];
-  const allClients = users ?? [];
 
   const totalIngresos = allPedidos
     .filter((p) => p.estado !== 'cancelado')
@@ -73,9 +64,7 @@ async function getDashboardData() {
     totalIngresos,
     pedidosPendientes,
     ultimosPedidos:  allPedidos.slice(0, 6),
-    ultimosClientes: allClients
-      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-      .slice(0, 5),
+    ultimosClientes: allClients.slice(0, 5),
     topProductos,
   };
 }
@@ -199,12 +188,9 @@ export default async function AdminDashboard() {
               <div key={c.id} className="client-chip">
                 <div className="client-chip-avatar">{c.email?.[0]?.toUpperCase()}</div>
                 <div className="client-chip-info">
-                  <span className="client-chip-email">{c.email}</span>
+                  <span className="client-chip-email">{c.nombre ?? c.email}</span>
                   <span className="client-chip-date">{new Date(c.created_at).toLocaleDateString('es-GT')}</span>
                 </div>
-                <span className={`badge ${c.email_confirmed_at ? 'badge-success' : 'badge-warning'}`}>
-                  {c.email_confirmed_at ? 'Verificado' : 'Pendiente'}
-                </span>
               </div>
             ))}
           </div>

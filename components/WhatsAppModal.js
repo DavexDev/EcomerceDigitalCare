@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
 
 export default function WhatsAppModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,10 +28,10 @@ export default function WhatsAppModal() {
     setSending(true);
 
     try {
-      await supabase.from('contactos').insert({
-        producto,
-        sucursal: 'Chiquimula',
-        mensaje: mensaje || null,
+      await fetch('/api/admin/contactos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ producto, sucursal: 'Chiquimula', mensaje: mensaje || null }),
       });
     } catch (error) {
       console.error('Error guardando contacto:', error);

@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
 
 export default function AdminLicenciasPage() {
   const [items, setItems] = useState([]);
@@ -15,8 +14,9 @@ export default function AdminLicenciasPage() {
   });
 
   const fetchItems = async () => {
-    const { data } = await supabase.from('licencias').select('*').order('nombre');
-    setItems(data || []);
+    const res = await fetch('/api/admin/licencias');
+    const data = await res.json();
+    setItems(Array.isArray(data) ? data : []);
     setLoading(false);
   };
 
@@ -36,9 +36,17 @@ export default function AdminLicenciasPage() {
     };
 
     if (editId) {
-      await supabase.from('licencias').update(payload).eq('id', editId);
+      await fetch('/api/admin/licencias', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: editId, ...payload }),
+      });
     } else {
-      await supabase.from('licencias').insert(payload);
+      await fetch('/api/admin/licencias', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
     }
 
     setForm({ nombre: '', descripcion: '', precio: '', duracion: '12', tipo: 'antivirus' });
@@ -58,13 +66,17 @@ export default function AdminLicenciasPage() {
   };
 
   const handleToggle = async (item) => {
-    await supabase.from('licencias').update({ activo: !item.activo }).eq('id', item.id);
+    await fetch('/api/admin/licencias', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: item.id, activo: !item.activo }),
+    });
     fetchItems();
   };
 
   const handleDelete = async (id) => {
     if (confirm('¿Eliminar esta licencia?')) {
-      await supabase.from('licencias').delete().eq('id', id);
+      await fetch(`/api/admin/licencias?id=${id}`, { method: 'DELETE' });
       fetchItems();
     }
   };

@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
 
 export default function AdminAccesoriosPage() {
   const [items, setItems] = useState([]);
@@ -9,8 +8,9 @@ export default function AdminAccesoriosPage() {
   const [form, setForm] = useState({ nombre: '', descripcion: '', precio: '', stock: '' });
 
   const fetchItems = async () => {
-    const { data } = await supabase.from('accesorios').select('*').order('nombre');
-    setItems(data || []);
+    const res = await fetch('/api/admin/accesorios');
+    const data = await res.json();
+    setItems(Array.isArray(data) ? data : []);
     setLoading(false);
   };
 
@@ -29,9 +29,17 @@ export default function AdminAccesoriosPage() {
     };
 
     if (editId) {
-      await supabase.from('accesorios').update(payload).eq('id', editId);
+      await fetch('/api/admin/accesorios', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: editId, ...payload }),
+      });
     } else {
-      await supabase.from('accesorios').insert(payload);
+      await fetch('/api/admin/accesorios', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
     }
 
     setForm({ nombre: '', descripcion: '', precio: '', stock: '' });
@@ -50,13 +58,17 @@ export default function AdminAccesoriosPage() {
   };
 
   const handleToggle = async (item) => {
-    await supabase.from('accesorios').update({ activo: !item.activo }).eq('id', item.id);
+    await fetch('/api/admin/accesorios', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: item.id, activo: !item.activo }),
+    });
     fetchItems();
   };
 
   const handleDelete = async (id) => {
     if (confirm('¿Eliminar este accesorio?')) {
-      await supabase.from('accesorios').delete().eq('id', id);
+      await fetch(`/api/admin/accesorios?id=${id}`, { method: 'DELETE' });
       fetchItems();
     }
   };

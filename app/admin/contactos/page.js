@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
 
 export default function AdminContactosPage() {
   const [leads, setLeads] = useState([]);
@@ -8,16 +7,10 @@ export default function AdminContactosPage() {
   const [filter, setFilter] = useState('todos');
 
   const fetchLeads = async () => {
-    let query = supabase.from('leads').select('*').order('created_at', { ascending: false });
-    
-    if (filter === 'pendientes') {
-      query = query.eq('contactado', false);
-    } else if (filter === 'contactados') {
-      query = query.eq('contactado', true);
-    }
-    
-    const { data } = await query;
-    setLeads(data || []);
+    const params = filter !== 'todos' ? `?filter=${filter === 'pendientes' ? 'pendiente' : 'contactado'}` : '';
+    const res = await fetch(`/api/admin/contactos${params}`);
+    const data = await res.json();
+    setLeads(Array.isArray(data) ? data : []);
     setLoading(false);
   };
 
@@ -26,13 +19,17 @@ export default function AdminContactosPage() {
   }, [filter]);
 
   const handleToggleContactado = async (lead) => {
-    await supabase.from('leads').update({ contactado: !lead.contactado }).eq('id', lead.id);
+    await fetch('/api/admin/contactos', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: lead.id, contactado: !lead.contactado }),
+    });
     fetchLeads();
   };
 
   const handleDelete = async (id) => {
     if (confirm('¿Eliminar este contacto?')) {
-      await supabase.from('leads').delete().eq('id', id);
+      await fetch(`/api/admin/contactos?id=${id}`, { method: 'DELETE' });
       fetchLeads();
     }
   };

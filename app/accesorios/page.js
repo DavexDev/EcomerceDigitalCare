@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { query } from '@/lib/db';
 import Header from '@/components/Header';
 import ProductCard from '@/components/ProductCard';
 
@@ -16,17 +16,12 @@ export const metadata = {
 };
 
 async function getAccesorios() {
-  const { data, error } = await supabase
-    .from('accesorios')
-    .select('*')
-    .eq('activo', true)
-    .order('nombre');
-
-  if (error) {
-    console.error('Error fetching accesorios:', error);
+  try {
+    return await query('SELECT * FROM accesorios WHERE activo = true ORDER BY nombre');
+  } catch (err) {
+    console.error('Error fetching accesorios:', err);
     return [];
   }
-  return data || [];
 }
 
 export default async function AccesoriosPage() {

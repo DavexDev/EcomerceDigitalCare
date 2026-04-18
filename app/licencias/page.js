@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { query } from '@/lib/db';
 import Header from '@/components/Header';
 import ProductCard from '@/components/ProductCard';
 
@@ -16,17 +16,12 @@ export const metadata = {
 };
 
 async function getLicencias() {
-  const { data, error } = await supabase
-    .from('licencias')
-    .select('*')
-    .eq('activo', true)
-    .order('plataforma');
-
-  if (error) {
-    console.error('Error fetching licencias:', error);
+  try {
+    return await query('SELECT * FROM licencias WHERE activo = true ORDER BY nombre');
+  } catch (err) {
+    console.error('Error fetching licencias:', err);
     return [];
   }
-  return data || [];
 }
 
 export default async function LicenciasPage() {

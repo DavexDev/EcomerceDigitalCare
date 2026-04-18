@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '@/hooks/useCart';
 import { useClientAuth } from '@/hooks/useClientAuth';
-import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import Link from 'next/link';
@@ -63,16 +62,12 @@ export default function CheckoutPage() {
     setEnviando(true);
 
     try {
-      await supabase.from('pedidos').insert({
-        nombre,
-        email,
-        items: JSON.stringify(items),
-        total,
-        metodo_pago: 'Transferencia bancaria',
-        referencia_transferencia: referencia,
-        estado: 'pendiente',
-        user_id: client?.id || null,
+      const res = await fetch('/api/pedidos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, email, items, total, referencia }),
       });
+      if (!res.ok) throw new Error('Error al guardar pedido');
 
       clearCart();
       setConfirmado(true);

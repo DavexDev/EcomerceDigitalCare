@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useClientAuth } from '@/hooks/useClientAuth';
-import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import Link from 'next/link';
@@ -27,12 +26,10 @@ export default function CuentaPage() {
 
   useEffect(() => {
     if (!client) return;
-    supabase
-      .from('pedidos')
-      .select('*')
-      .eq('email', client.email)
-      .then(({ data }) => {
-        setPedidos(data || []);
+    fetch('/api/admin/pedidos?email=' + encodeURIComponent(client.email))
+      .then(r => r.json())
+      .then(data => {
+        setPedidos(Array.isArray(data) ? data : []);
         setLoadingPedidos(false);
       });
   }, [client]);
