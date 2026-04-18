@@ -1,12 +1,12 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCart } from '@/hooks/useCart';
 import { useClientAuth } from '@/hooks/useClientAuth';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import Link from 'next/link';
-import { Building2, Copy, CheckCircle2 } from 'lucide-react';
+import { Building2, Copy, CheckCircle2, ShoppingBag, ArrowLeft, MessageCircle } from 'lucide-react';
 
 const BANCO = {
   banco: 'Banrural',
@@ -20,13 +20,28 @@ export default function CheckoutPage() {
   const { client } = useClientAuth();
   const router = useRouter();
 
-  const [nombre, setNombre] = useState(client?.user_metadata?.nombre || '');
-  const [email, setEmail] = useState(client?.email || '');
+  const [nombre, setNombre] = useState('');
+  const [email, setEmail]   = useState('');
   const [referencia, setReferencia] = useState('');
-  const [enviando, setEnviando] = useState(false);
+  const [enviando, setEnviando]     = useState(false);
   const [confirmado, setConfirmado] = useState(false);
-  const [copiado, setCopiado] = useState(false);
-  const [error, setError] = useState('');
+  const [copiado, setCopiado]       = useState(false);
+  const [error, setError]           = useState('');
+
+  // Pre-llenar con datos del cliente si está logueado
+  useEffect(() => {
+    if (client) {
+      setNombre(client.user_metadata?.nombre || '');
+      setEmail(client.email || '');
+    }
+  }, [client]);
+
+  // Redirigir si el carrito está vacío (y no venimos de una confirmación)
+  useEffect(() => {
+    if (!confirmado && items.length === 0) {
+      router.replace('/accesorios');
+    }
+  }, [items, confirmado, router]);
 
   const copiarCuenta = () => {
     navigator.clipboard.writeText(BANCO.cuenta);
