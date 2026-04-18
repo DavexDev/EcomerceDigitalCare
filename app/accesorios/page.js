@@ -2,7 +2,18 @@ import { supabase } from '@/lib/supabase';
 import Header from '@/components/Header';
 import ProductCard from '@/components/ProductCard';
 
-export const revalidate = 60; // Revalidar cada 60 segundos
+export const revalidate = 60;
+
+export const metadata = {
+  title: 'Accesorios para PC y Gaming',
+  description: 'Teclados mecánicos, mouses gamer, auriculares y más accesorios en Chiquimula, Guatemala. Envío local disponible.',
+  openGraph: {
+    title: 'Accesorios para PC y Gaming — DigitalCare GT',
+    description: 'Encuentra los mejores accesorios para tu PC o consola en Chiquimula, Guatemala.',
+    url: 'https://digitalcare.gt/accesorios',
+  },
+  alternates: { canonical: 'https://digitalcare.gt/accesorios' },
+};
 
 async function getAccesorios() {
   const { data, error } = await supabase
@@ -43,6 +54,7 @@ export default async function AccesoriosPage() {
               {datosEjemplo.map((item) => (
                 <ProductCard
                   key={item.id}
+                  id={item.id}
                   nombre={item.nombre}
                   descripcion={item.descripcion}
                   precio={item.precio}

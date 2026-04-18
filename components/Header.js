@@ -2,8 +2,10 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronDown, Sun, Moon } from 'lucide-react';
+import { ChevronDown, Sun, Moon, User } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
+import { useClientAuth } from '@/hooks/useClientAuth';
+import CartDrawer from '@/components/CartDrawer';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -12,6 +14,7 @@ export default function Header() {
   const [isMobile, setIsMobile] = useState(false);
   const navRef = useRef(null);
   const { dark, toggleDark } = useTheme();
+  const { client } = useClientAuth();
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -141,6 +144,17 @@ export default function Header() {
               Contacto
             </button>
           </li>
+          <li>
+            <Link
+              href={client ? '/cuenta' : '/cuenta/login'}
+              className="theme-toggle"
+              title={client ? 'Mi cuenta' : 'Iniciar sesión'}
+              onClick={() => setMenuOpen(false)}
+            >
+              <User size={18} />
+            </Link>
+          </li>
+          <li><CartDrawer /></li>
           <li>
             <button
               className="theme-toggle"

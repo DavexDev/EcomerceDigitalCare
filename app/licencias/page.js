@@ -2,7 +2,18 @@ import { supabase } from '@/lib/supabase';
 import Header from '@/components/Header';
 import ProductCard from '@/components/ProductCard';
 
-export const revalidate = 60; // Revalidar cada 60 segundos
+export const revalidate = 60;
+
+export const metadata = {
+  title: 'Licencias Originales de Software',
+  description: 'Windows 10/11 Pro, Office 2021, Antivirus ESET y más licencias originales en Chiquimula, Guatemala. Activación garantizada.',
+  openGraph: {
+    title: 'Licencias Originales de Software — DigitalCare GT',
+    description: 'Licencias originales de Windows, Office, AutoCAD y antivirus en Chiquimula, Guatemala.',
+    url: 'https://digitalcare.gt/licencias',
+  },
+  alternates: { canonical: 'https://digitalcare.gt/licencias' },
+};
 
 async function getLicencias() {
   const { data, error } = await supabase
@@ -45,6 +56,7 @@ export default async function LicenciasPage() {
               {datosEjemplo.map((item) => (
                 <ProductCard
                   key={item.id}
+                  id={item.id}
                   nombre={item.nombre}
                   descripcion={item.descripcion}
                   precio={item.precio}
