@@ -63,7 +63,6 @@ export default function Header() {
               <li><button onClick={() => scrollTo('soporte')}>Soporte</button></li>
               <li><button onClick={() => scrollTo('asesorias')}>Asesorías</button></li>
               <li><button onClick={() => scrollTo('seguridad')}>Seguridad</button></li>
-              <li><button onClick={() => scrollTo('desarrollo')}>Desarrollo Web</button></li>
             </ul>
           </li>
           <li className="has-submenu">

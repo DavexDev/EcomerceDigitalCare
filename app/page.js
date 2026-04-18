@@ -1,178 +1,250 @@
+'use client';
 import Header from '@/components/Header';
 import Link from 'next/link';
 
 export default function HomePage() {
+  const openWhatsApp = (producto) => {
+    window.dispatchEvent(new CustomEvent('open-whatsapp', { detail: { producto } }));
+  };
+
   return (
     <>
       <Header />
 
-      {/* HERO */}
+      {/* HERO - Kong inspired */}
       <section className="hero">
-        <video autoPlay muted loop playsInline className="hero-video">
-          <source src="/hero-bg.mp4" type="video/mp4" />
-        </video>
+        <div className="hero-bg-gradient"></div>
         <div className="hero-content">
-          <h1>DigitalCare GT</h1>
-          <p>Soporte técnico, desarrollo web, seguridad digital y más.</p>
+          <p className="hero-tagline">SOLUCIONES TECNOLÓGICAS</p>
+          <h1 className="hero-title">
+            <span className="gradient-text">Tecnología</span> que impulsa
+            <br />tu productividad
+          </h1>
+          <p className="hero-subtitle">Soporte técnico, seguridad digital, licencias y accesorios para tu equipo.</p>
+          <div className="hero-cta">
+            <button className="btn-primary" onClick={() => openWhatsApp('Consulta General')}>
+              Contáctanos
+            </button>
+            <Link href="/accesorios" className="btn-secondary">Ver Catálogo</Link>
+          </div>
         </div>
       </section>
 
-      {/* MANTENIMIENTO */}
-      <section id="mantenimiento" className="section mantenimiento">
+      {/* STATS - Kong inspired */}
+      <section className="stats-section">
+        <div className="stats-container">
+          <div className="stat-item">
+            <span className="stat-number">500+</span>
+            <span className="stat-label">Clientes Satisfechos</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number">99%</span>
+            <span className="stat-label">Problemas Resueltos</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number">24h</span>
+            <span className="stat-label">Tiempo de Respuesta</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number">5★</span>
+            <span className="stat-label">Calificación Promedio</span>
+          </div>
+        </div>
+      </section>
+
+      {/* TRUST BANNER */}
+      <section className="trust-banner">
+        <p>CONFÍAN EN NOSOTROS</p>
+        <div className="trust-logos">
+          <span>ESET</span>
+          <span>Microsoft</span>
+          <span>Kaspersky</span>
+          <span>Windows</span>
+          <span>AMD</span>
+          <span>Intel</span>
+        </div>
+      </section>
+
+      {/* SERVICIOS - Kong inspired numbered sections */}
+      <section className="services-intro">
         <div className="container">
-          <h2>Mantenimiento de PC y Consolas</h2>
-          <p>Ofrecemos servicios completos de diagnóstico, reparación y mantenimiento preventivo para computadoras y consolas de videojuegos.</p>
-          <ul className="servicios-lista">
-            <li>✔ Limpieza interna y externa</li>
-            <li>✔ Cambio de pasta térmica</li>
-            <li>✔ Diagnóstico de fallos</li>
-            <li>✔ Reparación de hardware</li>
-            <li>✔ Instalación de sistema operativo</li>
-          </ul>
+          <p className="section-tag">NUESTROS SERVICIOS</p>
+          <h2 className="section-title-large">Soluciones completas para tu <span className="gradient-text">tecnología</span></h2>
+        </div>
+      </section>
+
+      {/* 01/ MANTENIMIENTO */}
+      <section id="mantenimiento" className="section numbered-section">
+        <div className="container">
+          <div className="section-number">01/</div>
+          <div className="section-content-split">
+            <div className="section-left">
+              <h2>Mantenimiento de PC y Consolas</h2>
+              <p>Servicios completos de diagnóstico, reparación y mantenimiento preventivo para computadoras y consolas de videojuegos.</p>
+              <button className="btn-outline" onClick={() => openWhatsApp('Mantenimiento')}>
+                Solicitar Servicio
+              </button>
+            </div>
+            <div className="section-right">
+              <div className="feature-grid">
+                <div className="feature-item"><span className="feature-icon">🔧</span> Limpieza interna y externa</div>
+                <div className="feature-item"><span className="feature-icon">🌡️</span> Cambio de pasta térmica</div>
+                <div className="feature-item"><span className="feature-icon">🔍</span> Diagnóstico de fallos</div>
+                <div className="feature-item"><span className="feature-icon">⚙️</span> Reparación de hardware</div>
+                <div className="feature-item"><span className="feature-icon">💿</span> Instalación de sistema operativo</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* PRODUCTOS SECTION - Kong inspired */}
+      <section className="products-section">
+        <div className="container">
+          <p className="section-tag">NUESTROS PRODUCTOS</p>
+          <h2 className="section-title-large">Todo lo que necesitas en <span className="gradient-text">un solo lugar</span></h2>
         </div>
       </section>
 
       {/* ACCESORIOS (preview) */}
-      <section id="accesorios" className="section accesorios">
+      <section id="accesorios" className="section products-preview">
         <div className="container">
-          <h2>Accesorios</h2>
-          <p>Encuentra los mejores complementos para tu PC o consola: calidad, estilo y funcionalidad en un solo lugar.</p>
-          <div className="accesorios-grid">
-            <div className="accesorio-card">
+          <div className="products-header">
+            <h2>Accesorios</h2>
+            <Link href="/accesorios" className="btn-outline">Ver Catálogo</Link>
+          </div>
+          <p className="products-desc">Encuentra los mejores complementos para tu PC o consola.</p>
+          <div className="products-grid">
+            <div className="product-card-modern">
+              <div className="product-icon">⌨️</div>
               <h3>Teclado Mecánico RGB</h3>
-              <p>Iluminación LED, switches blue, ideal para gaming y escritura.</p>
-              <span className="precio">Q250</span>
+              <p>Iluminación LED, switches blue, ideal para gaming.</p>
+              <span className="product-price">Q250</span>
             </div>
-            <div className="accesorio-card">
+            <div className="product-card-modern">
+              <div className="product-icon">🖱️</div>
               <h3>Mouse Gamer 7200 DPI</h3>
               <p>Diseño ergonómico, 6 botones programables.</p>
-              <span className="precio">Q180</span>
+              <span className="product-price">Q180</span>
             </div>
-            <div className="accesorio-card">
+            <div className="product-card-modern">
+              <div className="product-icon">🎧</div>
               <h3>Auriculares con Micrófono</h3>
               <p>Sonido envolvente, cómodos para largas sesiones.</p>
-              <span className="precio">Q220</span>
+              <span className="product-price">Q220</span>
             </div>
-          </div>
-          <div className="ver-mas-container">
-            <Link href="/accesorios" className="btn-ver-mas">Ver más accesorios</Link>
           </div>
         </div>
       </section>
 
       {/* LICENCIAS (preview) */}
-      <section id="licencias" className="section licencias">
+      <section id="licencias" className="section products-preview alt-bg">
         <div className="container">
-          <h2>Venta de Licencias</h2>
-          <p>Licencias originales para uso personal, profesional o empresarial. Garantizamos productos genuinos y activación segura.</p>
-          <div className="licencias-grid">
-            <div className="licencia-card">
+          <div className="products-header">
+            <h2>Licencias</h2>
+            <Link href="/licencias" className="btn-outline">Ver Catálogo</Link>
+          </div>
+          <p className="products-desc">Licencias originales con activación segura garantizada.</p>
+          <div className="products-grid">
+            <div className="product-card-modern">
+              <div className="product-icon">🪟</div>
               <h3>Windows 10/11 Pro</h3>
-              <p>Licencia permanente</p>
-              <span className="precio">Q150</span>
+              <p>Licencia perpetua</p>
+              <span className="product-price">Q150</span>
             </div>
-            <div className="licencia-card">
+            <div className="product-card-modern">
+              <div className="product-icon">📊</div>
               <h3>Microsoft Office 2021</h3>
               <p>Word, Excel, PowerPoint y más</p>
-              <span className="precio">Q200</span>
+              <span className="product-price">Q200</span>
             </div>
-            <div className="licencia-card">
+            <div className="product-card-modern">
+              <div className="product-icon">🛡️</div>
               <h3>Antivirus ESET</h3>
               <p>Protección total por 1 año</p>
-              <span className="precio">Q120</span>
-            </div>
-          </div>
-          <div className="ver-mas-container">
-            <Link href="/licencias" className="btn-ver-mas">Ver más licencias</Link>
-          </div>
-        </div>
-      </section>
-
-      {/* SOPORTE */}
-      <section id="soporte" className="section soporte">
-        <div className="container">
-          <h2>Soporte Técnico</h2>
-          <p>Asistencia especializada para computadoras, laptops y consolas. Soluciones a problemas de hardware y software.</p>
-          <div className="soporte-servicios">
-            <div className="servicio">
-              <h3>✔ Diagnóstico remoto</h3>
-              <p>Conexión segura para diagnosticar y resolver problemas.</p>
-            </div>
-            <div className="servicio">
-              <h3>✔ Reparaciones a domicilio</h3>
-              <p>Servicio técnico rápido y profesional donde lo necesites.</p>
-            </div>
-            <div className="servicio">
-              <h3>✔ Optimización de rendimiento</h3>
-              <p>Mejoramos el funcionamiento de tu sistema.</p>
+              <span className="product-price">Q120</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ASESORÍAS */}
-      <section id="asesorias" className="section asesorias">
+      {/* 02/ SOPORTE */}
+      <section id="soporte" className="section numbered-section alt-bg">
         <div className="container">
-          <h2>Asesorías</h2>
-          <p>Te ayudamos a tomar decisiones tecnológicas acertadas con soluciones a medida.</p>
-          <div className="asesorias-grid">
-            <div className="asesoria-item">
-              <h3>✔ Elección de equipos</h3>
-              <p>Recomendaciones según tu presupuesto y necesidades.</p>
+          <div className="section-number">02/</div>
+          <div className="section-content-split reverse">
+            <div className="section-left">
+              <h2>Soporte Técnico</h2>
+              <p>Asistencia especializada para computadoras, laptops y consolas. Soluciones a problemas de hardware y software.</p>
+              <button className="btn-outline" onClick={() => openWhatsApp('Soporte Técnico')}>
+                Obtener Soporte
+              </button>
             </div>
-            <div className="asesoria-item">
-              <h3>✔ Configuraciones personalizadas</h3>
-              <p>Setups para gaming, oficina o trabajo creativo.</p>
-            </div>
-            <div className="asesoria-item">
-              <h3>✔ Soluciones a medida</h3>
-              <p>Te recomendamos software, seguridad y herramientas digitales.</p>
+            <div className="section-right">
+              <div className="feature-grid">
+                <div className="feature-item"><span className="feature-icon">🖥️</span> Diagnóstico remoto seguro</div>
+                <div className="feature-item"><span className="feature-icon">🏠</span> Reparaciones a domicilio</div>
+                <div className="feature-item"><span className="feature-icon">⚡</span> Optimización de rendimiento</div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* SEGURIDAD */}
-      <section id="seguridad" className="section seguridad">
+      {/* 03/ ASESORÍAS */}
+      <section id="asesorias" className="section numbered-section">
         <div className="container">
-          <h2>Protección y Seguridad Digital</h2>
-          <p>Protege tu información con nuestros servicios de ciberseguridad.</p>
-          <div className="seguridad-lista">
-            <div className="seguridad-item">
-              <h3>✔ Instalación de antivirus</h3>
-              <p>Protección avanzada con ESET, Kaspersky o Bitdefender.</p>
+          <div className="section-number">03/</div>
+          <div className="section-content-split">
+            <div className="section-left">
+              <h2>Asesorías Tecnológicas</h2>
+              <p>Te ayudamos a tomar decisiones tecnológicas acertadas con soluciones personalizadas.</p>
+              <button className="btn-outline" onClick={() => openWhatsApp('Asesoría')}>
+                Solicitar Asesoría
+              </button>
             </div>
-            <div className="seguridad-item">
-              <h3>✔ Protección de datos</h3>
-              <p>Respaldo automático, cifrado y recuperación segura.</p>
-            </div>
-            <div className="seguridad-item">
-              <h3>✔ Auditoría de seguridad</h3>
-              <p>Evaluamos tu entorno digital y cerramos vulnerabilidades.</p>
+            <div className="section-right">
+              <div className="feature-grid">
+                <div className="feature-item"><span className="feature-icon">🎯</span> Elección de equipos</div>
+                <div className="feature-item"><span className="feature-icon">🎮</span> Configuraciones personalizadas</div>
+                <div className="feature-item"><span className="feature-icon">💡</span> Soluciones a medida</div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* DESARROLLO WEB */}
-      <section id="desarrollo" className="section desarrollo">
+      {/* 04/ SEGURIDAD */}
+      <section id="seguridad" className="section numbered-section alt-bg">
         <div className="container">
-          <h2>Desarrollo Web</h2>
-          <p>Diseñamos sitios web profesionales, responsivos y optimizados para tu negocio.</p>
-          <div className="desarrollo-tipos">
-            <div className="tipo-web">
-              <h3>✔ Sitios Informativos</h3>
-              <p>Ideales para empresas, servicios y portafolios.</p>
+          <div className="section-number">04/</div>
+          <div className="section-content-split reverse">
+            <div className="section-left">
+              <h2>Protección y Seguridad Digital</h2>
+              <p>Protege tu información con nuestros servicios de ciberseguridad profesional.</p>
+              <button className="btn-outline" onClick={() => openWhatsApp('Seguridad Digital')}>
+                Proteger Mi Equipo
+              </button>
             </div>
-            <div className="tipo-web">
-              <h3>✔ E-commerce</h3>
-              <p>Tiendas online completas con pagos integrados.</p>
-            </div>
-            <div className="tipo-web">
-              <h3>✔ Landing Pages</h3>
-              <p>Páginas orientadas a conversión o productos específicos.</p>
+            <div className="section-right">
+              <div className="feature-grid">
+                <div className="feature-item"><span className="feature-icon">🛡️</span> Instalación de antivirus</div>
+                <div className="feature-item"><span className="feature-icon">🔒</span> Protección de datos</div>
+                <div className="feature-item"><span className="feature-icon">🔎</span> Auditoría de seguridad</div>
+              </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* CTA FINAL - Kong inspired */}
+      <section className="final-cta">
+        <div className="container">
+          <h2>¿Listo para <span className="gradient-text">potenciar</span> tu tecnología?</h2>
+          <p>Contáctanos hoy y descubre cómo podemos ayudarte.</p>
+          <button className="btn-primary large" onClick={() => openWhatsApp('Consulta General')}>
+            Solicitar Cotización
+          </button>
         </div>
       </section>
     </>
