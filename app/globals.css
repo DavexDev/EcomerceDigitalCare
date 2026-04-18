@@ -297,17 +297,30 @@ img {
 .submenu {
   position: absolute;
   top: 100%;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   display: none;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
-  padding: 8px 0;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  padding: 10px 0;
   border-radius: 8px;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-  min-width: 180px;
-  z-index: 1000;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  min-width: 200px;
+  z-index: 1001;
   list-style: none;
+  margin-top: 5px;
+}
+
+.submenu::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #ffffff;
 }
 
 .has-submenu:hover .submenu {
@@ -316,33 +329,52 @@ img {
 
 .submenu li {
   padding: 0;
+  width: 100%;
 }
 
 .submenu li a,
 .submenu li button {
   display: block;
-  padding: 10px 16px;
+  width: 100%;
+  padding: 12px 20px;
   white-space: nowrap;
   color: #176887;
   text-decoration: none;
-  transition: background 0.2s;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 0.95rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
 }
 
 .submenu li a:hover,
 .submenu li button:hover {
-  background-color: rgba(100, 204, 197, 0.1);
+  background-color: #f0fafa;
   color: #64ccc5;
 }
 
 .submenu-toggle {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.has-submenu:hover .submenu-toggle {
+  background: rgba(100, 204, 197, 0.1);
 }
 
 .arrow {
-  font-size: 0.8em;
+  font-size: 0.75em;
   transition: transform 0.3s;
+}
+
+.has-submenu:hover .arrow {
+  transform: rotate(180deg);
 }
 
 /* === MODAL === */
@@ -617,9 +649,18 @@ textarea {
     position: static;
     display: none;
     width: 100%;
-    background: transparent;
+    background: #f8f8f8;
     box-shadow: none;
+    border: none;
     margin-top: 10px;
+    padding: 10px 0;
+    border-radius: 8px;
+    transform: none;
+    left: 0;
+  }
+
+  .submenu::before {
+    display: none;
   }
 
   .has-submenu:hover .submenu {
@@ -628,6 +669,12 @@ textarea {
 
   .submenu.show {
     display: flex;
+  }
+
+  .submenu li a,
+  .submenu li button {
+    text-align: center;
+    padding: 10px 15px;
   }
 
   .hero h1 {

@@ -6,6 +6,7 @@ import Image from 'next/image';
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeSubmenu, setActiveSubmenu] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -16,11 +17,17 @@ export default function Header() {
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
     setMenuOpen(false);
+    setActiveSubmenu(null);
   };
 
   const openWhatsApp = (producto) => {
     window.dispatchEvent(new CustomEvent('open-whatsapp', { detail: { producto } }));
     setMenuOpen(false);
+    setActiveSubmenu(null);
+  };
+
+  const toggleSubmenu = (name) => {
+    setActiveSubmenu(activeSubmenu === name ? null : name);
   };
 
   return (
@@ -33,7 +40,10 @@ export default function Header() {
 
       <button
         className="hamburger"
-        onClick={() => setMenuOpen(!menuOpen)}
+        onClick={() => {
+          setMenuOpen(!menuOpen);
+          setActiveSubmenu(null);
+        }}
         aria-label="Menú"
       >
         {menuOpen ? '✖' : '☰'}
@@ -42,10 +52,13 @@ export default function Header() {
       <nav className={`nav${menuOpen ? ' show' : ''}`} id="nav-menu">
         <ul className="menu-principal">
           <li className="has-submenu">
-            <span className="submenu-toggle">
+            <span 
+              className="submenu-toggle"
+              onClick={() => toggleSubmenu('servicios')}
+            >
               Servicios <span className="arrow">▾</span>
             </span>
-            <ul className="submenu">
+            <ul className={`submenu${activeSubmenu === 'servicios' ? ' show' : ''}`}>
               <li><button onClick={() => scrollTo('mantenimiento')}>Mantenimiento</button></li>
               <li><button onClick={() => scrollTo('soporte')}>Soporte</button></li>
               <li><button onClick={() => scrollTo('asesorias')}>Asesorías</button></li>
@@ -54,12 +67,15 @@ export default function Header() {
             </ul>
           </li>
           <li className="has-submenu">
-            <span className="submenu-toggle">
+            <span 
+              className="submenu-toggle"
+              onClick={() => toggleSubmenu('productos')}
+            >
               Productos <span className="arrow">▾</span>
             </span>
-            <ul className="submenu">
-              <li><Link href="/licencias" onClick={() => setMenuOpen(false)}>Licencias</Link></li>
-              <li><Link href="/accesorios" onClick={() => setMenuOpen(false)}>Accesorios</Link></li>
+            <ul className={`submenu${activeSubmenu === 'productos' ? ' show' : ''}`}>
+              <li><Link href="/licencias" onClick={() => { setMenuOpen(false); setActiveSubmenu(null); }}>Licencias</Link></li>
+              <li><Link href="/accesorios" onClick={() => { setMenuOpen(false); setActiveSubmenu(null); }}>Accesorios</Link></li>
             </ul>
           </li>
           <li>
