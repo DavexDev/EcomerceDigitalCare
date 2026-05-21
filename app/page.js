@@ -1,6 +1,7 @@
 'use client';
 import Header from '@/components/Header';
 import Link from 'next/link';
+import { CpuArchitecture } from '@/components/ui/cpu-architecture';
 import { 
   Wrench, Thermometer, Search, Settings, Disc3, 
   Keyboard, Mouse, Headphones, 
@@ -22,11 +23,34 @@ export default function HomePage() {
       {/* HERO - Kong inspired */}
       <section className="hero">
         <div className="hero-bg-gradient"></div>
-        <div className="hero-content">
+        {/* CPU Architecture Background */}
+        <div style={{ 
+          position: 'absolute', 
+          top: 0, 
+          left: 0, 
+          right: 0, 
+          bottom: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: 0.35,
+          zIndex: 0,
+          pointerEvents: 'none',
+          filter: 'drop-shadow(0 0 20px rgba(100, 200, 220, 0.3))'
+        }}>
+          <CpuArchitecture 
+            width="600px" 
+            height="400px" 
+            text="DC" 
+            animateText={true}
+            animateLines={true}
+            animateMarkers={true}
+          />
+        </div>
+        <div className="hero-content" style={{ position: 'relative', zIndex: 1 }}>
           <p className="hero-tagline">SOLUCIONES TECNOLÓGICAS</p>
           <h1 className="hero-title">
-            <span className="gradient-text">Tecnología</span> que impulsa
-            <br />tu productividad
+            <span className="gradient-text">DigitalCare</span>
           </h1>
           <p className="hero-subtitle">Soporte técnico, seguridad digital, licencias y accesorios para tu equipo.</p>
           <div className="hero-cta">
